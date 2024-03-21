@@ -9,18 +9,13 @@ router.use(authenticateJWT);
 
 
 // Get all tasks (only for admins)
-router.get('/getAll', authorizeRole('listTasks'),getTask, async (req, res) => {
+router.get('/getAll', authorizeRole('listTasks'), async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
-
-// Get a single task
-router.get('/:id', getTask, (req, res) => {
-  res.json(res.task);
 });
 
 // Create a task
@@ -56,14 +51,24 @@ router.patch('/update/:id',  authorizeRole('updateTask'),getTask, async (req, re
   }
 });
 
-// Delete a task
-router.delete('/delete/:id',authorizeRole('deleteTask'),getTask, async (req, res) => {
+//Delete a Task
+router.delete('/delete/:id', authorizeRole('deleteTask'), getTask, async (req, res) => {
   try {
-    await res.task.remove();
+    const taskToDelete = await Task.findById(req.params.id);
+    if (!taskToDelete) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    
+    await Task.findByIdAndDelete(req.params.id); // Delete the task directly
     res.json({ message: 'Task deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+// Get a single task
+router.get('/:id', (req, res) => {
+  res.json(res.task);
 });
 
 async function getTask(req, res, next) {
