@@ -1,4 +1,4 @@
-// models/task.js
+//This is the model for Tasks
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
