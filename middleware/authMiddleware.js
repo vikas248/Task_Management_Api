@@ -1,11 +1,11 @@
 require('dotenv').config();
 
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const roles = require('../config/roles');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+//For Authentication
 const authenticateJWT = (req, res, next) => {
   const token = req.headers['authorization'];
   if (!token) {
@@ -22,6 +22,7 @@ const authenticateJWT = (req, res, next) => {
   });
 };
 
+// For authorization 
 const authorizeRole = (role) => {
   return (req, res, next) => {
     const userRole = req.userRole;
