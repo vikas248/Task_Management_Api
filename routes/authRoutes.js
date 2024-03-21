@@ -1,5 +1,4 @@
 require('dotenv').config();
-// routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
@@ -9,15 +8,16 @@ const roles = require('../config/roles');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+
 // User Registration
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ message: 'Username already exists' });
     }
-    const user = new User({ username, password });
+    const user = new User({ username, password, role });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -38,6 +38,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     const token = jwt.sign({ userId: user._id, userRole: user.role }, JWT_SECRET, { expiresIn: '1h' });
+
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -46,7 +47,7 @@ router.post('/login', async (req, res) => {
 
 // User Logout (Not commonly implemented in JWT)
 router.post('/logout', async (req, res) => {
-  // You can implement additional logic here if needed
+  //can implement additional logic here if needed
   res.status(200).json({ message: 'Logout successful' });
 });
 
