@@ -7,7 +7,7 @@ const roles = require('../config/roles');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const authenticateJWT = (req, res, next) => {
-  const token = req.headers('authorization');
+  const token = req.headers['authorization'];
   if (!token) {
     return res.status(401).json({ message: 'Authentication token missing' });
   }
