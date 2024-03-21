@@ -17,6 +17,7 @@ const authenticateJWT = (req, res, next) => {
       return res.status(401).json({ message: 'Invalid token' });
     }
     req.userId = decoded.userId;
+    req.userRole = decoded.userRole; // Include user's role in the request object
     next();
   });
 };
