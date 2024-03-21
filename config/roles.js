@@ -1,4 +1,4 @@
-// config/roles.js
+//Defined the roles accordingly
 const roles = {
   admin: {
     can: ['addTask', 'updateTask', 'deleteTask', 'listTasks'],
